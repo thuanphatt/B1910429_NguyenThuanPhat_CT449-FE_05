@@ -75,7 +75,7 @@ export default {
   },
   emits: ["submit:contact", "delete:contact"],
   props: {
-    contact: { type: Object, required: true },
+    contact: { type: Object, required: true, default: () => ({ name: "" }) },
   },
   data() {
     const contactFormSchema = yup.object().shape({
