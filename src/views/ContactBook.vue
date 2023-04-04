@@ -44,6 +44,20 @@
       </div>
     </div>
     <div class="mt-3 col-md-6">
+      <div class="filter-controls">
+        <label>
+          <input type="checkbox" v-model="showFavorites" />
+          Chỉ hiển thị yêu thích
+        </label>
+      </div>
+      <ContactList
+        v-if="filteredContactsCount > 0"
+        :contacts="filteredFavContacts"
+        v-model:activeIndex="activeIndex"
+      />
+      <p v-else>Không có liên hệ nào.</p>
+    </div>
+    <div class="mt-3 col-md-6">
       <div v-if="activeContact">
         <h4>
           Chi tiết Liên hệ
@@ -77,11 +91,15 @@ export default {
     InputSearch,
     ContactList,
   },
+  props: {
+    contact: { type: Object, required: true },
+  },
   data() {
     return {
       contacts: [],
       activeIndex: -1,
       searchText: "",
+      showFavorites: false,
     };
   },
   watch: {
@@ -101,6 +119,12 @@ export default {
       return this.contacts.filter((_contact, index) =>
         this.contactStrings[index].includes(this.searchText)
       );
+    },
+    filteredFavContacts() {
+      let favContacts = this.filteredContacts.filter(
+        (contact) => contact.favorite
+      );
+      return this.showFavorites ? favContacts : this.filteredContacts;
     },
     activeContact() {
       if (this.activeIndex < 0) return null;
